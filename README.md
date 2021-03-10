@@ -48,7 +48,7 @@ Project Organization
     |
     ├── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
     |
-    └── .env               <- Stores enviromnet variables. Do not track with version control.
+    └── .env               <- Stores environment variables for Dotenv module. Do not track with version control.
 
 --------
 
