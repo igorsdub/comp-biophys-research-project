@@ -1,7 +1,7 @@
-enm
+Computational Biophysics Research Project
 ==============================
 
-An Elastic Network Model of a Viral Capsid
+A descent project structure for doing and sharing science work in Computational Biophysics.
 
 Project Organization
 ------------
