@@ -83,13 +83,13 @@ target/
 .mypy_cache/
 
 # DotEnv configuration
-# .env
+.env
 
 # exclude data from source control by default
-# data/
+data/
 
 # Temporary file dir aka scratch
-# tmp/
+tmp/
 
 # PDB files
-# pdb/
+pdb/
