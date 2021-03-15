@@ -96,7 +96,6 @@ pdb/*
 
 # Output sractch for figures, tables and etc.
 scratch/*
-!scratch/.gitkeep
 
 # Include .gitkeep into version control
 !**/.gitkeep
