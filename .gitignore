@@ -86,16 +86,16 @@ target/
 .env
 
 # exclude data from source control by default
-data/
+data/*
 
 # Temporary file dir aka scratch
-tmp/
+tmp/*
 
 # PDB files
-pdb/
+pdb/*
 
 # Output sractch for figures, tables and etc.
-scratch/
+scratch/*
 !scratch/.gitkeep
 
 # Include .gitkeep into version control
