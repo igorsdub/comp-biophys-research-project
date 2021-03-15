@@ -5,12 +5,12 @@
     intFilePath: data/interim
     extFilePath: data/external
     outPath: output/
-    outPathScratch: output-scratch/
+    outPathScratch: scratch/
 
 # PDB paths
 - pdb:
     rawPdbPath: pdb/raw
-    proPdbPath: pdb/raw
+    proPdbPath: pdb/processed
 
 # Structure is name, name of value, [dataset name, timeseries name]
 -  timeSeries:
