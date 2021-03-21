@@ -88,7 +88,7 @@ target/
 # exclude data from source control by default
 data/*
 
-# Temporary file dir aka scratch
+# Temporary files
 tmp/*
 
 # PDB files

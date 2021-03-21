@@ -1,34 +1,20 @@
 # File paths
 - data:
-    rawFilePath: data/raw
-    proFilePath: data/processed
-    intFilePath: data/interim
-    extFilePath: data/external
-    outPath: output/
+    rawFilePath:    data/raw
+    proFilePath:    data/processed
+    intFilePath:    data/interim
+    extFilePath:    data/external
+    outPath:        output/
     outPathScratch: scratch/
 
-# PDB paths
+# PDB data
 - pdb:
-    rawPdbPath: pdb/raw
-    proPdbPath: pdb/processed
-
-# Structure is name, name of value, [dataset name, timeseries name]
--  timeSeries:
-    iop:
-      - DIOP
-      - K222
-    ios:
-      - PN2
-      - L2NC
-    gdp:
-      - PN2
-      - ABMI
-    emp:
-      - LMS
-      - MGRZ
-    hhc:
-      - CT
-      - ABJQ
+    rawPdbPath:     pdb/raw
+    intPdbPath:     pdb/interim
+    proPdbPath:     pdb/proccessed
+    codeList:
+      - 1a2b
+      - 3c4d   
 
 - viz:
     xtick.labelsize: 20
@@ -36,6 +22,7 @@
     font.size: 20
     figure.autolayout: False
     figure.figsize: 10,5.5
+    figure.dpi: 300
     axes.titlesize : 22
     axes.labelsize : 20
     lines.linewidth : 2
