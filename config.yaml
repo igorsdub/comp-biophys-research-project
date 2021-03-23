@@ -1,17 +1,18 @@
 # File paths
 - data:
-    rawFilePath:    data/raw
-    proFilePath:    data/processed
-    intFilePath:    data/interim
-    extFilePath:    data/external
+    rawFilePath:    data/raw/
+    intFilePath:    data/interim/
+    proFilePath:    data/processed/
+    extFilePath:    data/external/
     outPath:        output/
     outPathScratch: scratch/
 
 # PDB data
 - pdb:
-    rawPdbPath:     pdb/raw
-    intPdbPath:     pdb/interim
-    proPdbPath:     pdb/proccessed
+    rawFilePath:     pdb/raw/
+    intFilePath:     pdb/interim/
+    proFilePath:     pdb/proccessed/
+    extFilePath:     pdb/external/
     codeList:
       - 1a2b
       - 3c4d   
