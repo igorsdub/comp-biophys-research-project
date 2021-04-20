@@ -49,6 +49,7 @@ coverage.xml
 
 # Django stuff:
 *.log
+!simulation.log
 
 # Sphinx documentation
 docs/_build/
@@ -93,9 +94,24 @@ tmp/*
 
 # PDB files
 pdb/*
+!pdb/external/
 
 # Output sractch for figures, tables and etc.
 scratch/*
 
+# LaTeX auxillary files
+*.aux
+*.fdb_latexmk
+*.fls
+*.nav
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.out
+*.bbl
+*.blg
+
 # Include .gitkeep into version control
 !**/.gitkeep
+
