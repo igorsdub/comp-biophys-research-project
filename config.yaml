@@ -22,7 +22,7 @@
     ytick.labelsize: 20
     font.size: 20
     figure.autolayout: False
-    figure.figsize: 10,5.5
+    figure.figsize: 12,6
     figure.dpi: 300
     axes.titlesize : 22
     axes.labelsize : 20
