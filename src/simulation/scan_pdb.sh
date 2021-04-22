@@ -3,20 +3,20 @@
 # DDPT must be installed and added to PATH
 
 if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <pdb-filepath> <results-filepath> <cutoff>"
-    echo "Example: $0 pdb/processed/1c3b.1.pdb 8.00"
+    echo "Usage: $0 <pdb-filepath> <results-filepath> <flags>"
+    echo "Example: $0 pdb/processed/1c3b.1.pdb "-ca -het -c 8.0""
     exit 1
 fi
 
 echo "PDB filepath:"    $1
 echo "Results dir:"     $2
-echo "Cut-off (angs):"  $3
+echo "GENENMM flags:"   $3
 
 # Shortcut to the files and binaries
 ROOT=$PWD
 PDB_FILEPATH=$ROOT/$1
 RESULTS_DIR=$ROOT/$2
-CUTOFF=$3
+GENENMM_FLAGS=$3
 
 # PDB filepath must be in a format PDB_ID.PDB_FORM.pdb
 # Extract PDB filename and ID name
@@ -28,7 +28,7 @@ echo "PDB ID:"          $PDB_ID
 # Create results and working dirs
 # printf -v CUTOFF_PAD "%04.1f" $CUTOFF
 WORK_DIR=$ROOT/tmp/working-$PDB_ID-$PDB_FORM
-mkdir -p $RESULTS_DIR $WORK_DIR 
+mkdir -p $RESULTS_DIR $WORK_DIR
 
 echo -n "Moving to working directory:"
 pushd $WORK_DIR
@@ -37,14 +37,14 @@ echo "Running: SPACING"
 SPACING -pdb $PDB_FILEPATH -ca
 
 echo "Running: GENENMM"
-GENENMM -pdb $PDB_FILEPATH -ca -het -dna -c $CUTOFF -lig1
+GENENMM -pdb $PDB_FILEPATH $GENENMM_FLAGS
 
 echo "Running: DIAGSTD"
 DIAGSTD
 
 echo "Extract eigenvalues:"
 grep "VECTOR" matrix.eigenfacs > matrix.eigenvals
-
+awk '{ print $4 }' matrix.eigenvals > eigenvalues
 NO_MODES=$(awk 'END{print NR}' matrix.eigenvals)
 
 echo "Running: FREQEN"
@@ -65,9 +65,14 @@ do
     echo
 done
 
+# Write format flags to save files
+CUTOFF=$(echo $GENENMM_FLAGS | sed 's/.*-c\([0-9]*\.[0-9]*\)/\1/')
+PRINTF_STATEMENT=$(echo $GENENMM_FLAGS | sed "s/ //g" | sed "s/\(.*-c\).*/\1%05.2f/g")
+printf -v FORMATTED_GENENMM_FLAGS $PRINTF_STATEMENT $CUTOFF
+
 echo "Copy all simulation results to results dir:"
 for file in *; do 
-    cp -- "$file" "${RESULTS_DIR}/${PDB_ID}.${PDB_FORM}.${file}"
+    cp -- "$file" "${RESULTS_DIR}/${PDB_ID}.${PDB_FORM}.${FORMATTED_GENENMM_FLAGS}.${file}"
 done
 
 echo "Moving out of working directory: "
