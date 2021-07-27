@@ -80,7 +80,7 @@ def save_structure(data, pdb_code, output_filepath, form_idx=None):
         output_filename = "{}.{}.pdb".format(pdb_code, form_idx)
 
     data.to_pdb(path=os.path.join(output_filepath, output_filename),
-                    records=['ATOM', 'HETATM', 'OTHERS'],
+                    records=['ATOM', 'HETATM'],
                     gz=False,
                     append_newline=True)
             
