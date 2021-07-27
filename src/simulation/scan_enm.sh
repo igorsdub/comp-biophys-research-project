@@ -48,8 +48,8 @@ echo "Running: DIAGSTD"
 DIAGSTD
 
 echo "Extract eigenvalues:"
-grep "VECTOR" matrix.eigenfacs > matrix.eigenvals
-awk '{ print $4 }' matrix.eigenvals > eigenvalues
+grep "VECTOR" matrix.eigenfacs | awk '{ print $4 }' > eigenvals
+
 NO_MODES=$(awk 'END{print NR}' matrix.eigenvals)
 
 # echo "Running: FREQEN"

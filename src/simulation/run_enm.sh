@@ -45,11 +45,11 @@ DIAGSTD -i matrix.sdijf
 echo
 
 echo "Extract eigenvalues:"
-grep "VECTOR" matrix.eigenfacs | awk '{ print $4 }' > eigenvalues
+grep "VECTOR" matrix.eigenfacs | awk '{ print $4 }' > eigenvals.csv
 echo
 
 echo "Copy matrix.eigenfacs file to results dir:"
-mv matrix.eigenfacs ${RESULTS_DIR}
+mv matrix.eigenfacs eigenvals.csv -t ${RESULTS_DIR}
 echo
 
 echo "Moving out of working directory: "

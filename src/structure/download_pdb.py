@@ -9,40 +9,48 @@ import src.utilities as utils
 from urllib.request import urlretrieve
 
 @click.command()
-@click.argument('output_filepath', type=click.Path())
-def main(output_filepath):
+@click.argument('output_dir', type=click.Path())
+def main_commandline(output_dir):
     """ Downloads raw PDB structures listed in YAML file
         from PDB website (saved in pdb/raw).
     """
     logger = logging.getLogger(__name__)
     logger.info('download raw PDB files from PDB website')
 
-    config = utils.read_config()
-    pdb_codes = config['pdb']['codeList']
-    download_pdb(pdb_codes, output_filepath, biounit = True, compressed = False)
+    main(output_dir)
+    
 
-def download_pdb(pdb_codes, output_filepath, biounit = True, compressed = False):
+def main(output_dir):
+    """ Downloads raw PDB structures listed in YAML file
+        from PDB website (saved in pdb/raw).
+    """
+    config = utils.read_config()
+    pdb_code = config['pdb']['id']
+    download_pdb(pdb_code, output_dir, biounit = True, compressed = False)
+
+    return None
+
+
+def download_pdb(pdb_code, output_dir, biounit = True, compressed = False):
     """ Downloads raw PDB files form a list of PDB IDs.
         Authored by Chris Swain (http://www.macinchem.org)
         Modified by Igors Dubanevics (https://github.com/igordub)
         Copyright CC-BY
     """
+    # Add .pdb extension and remove ':1' suffix in entities
+    filename = "{:4s}.pdb".format(pdb_code[:4])
     
-    for pdb_code in pdb_codes:
-        # Add .pdb extension and remove ':1' suffix in entities
-        filename = "{:4s}.pdb".format(pdb_code[:4])
-        
-        # Add '1' if biounit
-        if biounit:
-            filename = "{}1".format(filename)
-        # Add .gz extenison if compressed
-        elif compressed:
-            filename = "{}.gz".format(filename)
-        
-        url = os.path.join("https://files.rcsb.org/download/", filename.lower())
-        destination_file = os.path.join(output_filepath, filename)
-        # Download file
-        urlretrieve(url, destination_file)
+    # Add '1' if biounit
+    if biounit:
+        filename = "{}1".format(filename)
+    # Add .gz extenison if compressed
+    elif compressed:
+        filename = "{}.gz".format(filename)
+    
+    url = os.path.join("https://files.rcsb.org/download/", filename.lower())
+    destination_file = os.path.join(output_dir, filename)
+    # Download file
+    urlretrieve(url, destination_file)
 
     return None
 
@@ -58,4 +66,4 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    main()
+    main_commandline()

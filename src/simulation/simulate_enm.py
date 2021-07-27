@@ -27,44 +27,21 @@ def main_comandline(input_dir, output_dir):
     """
     logger = logging.getLogger(__name__)
     logger.info('making simulation data set from processed PDB structures')
-
-    # config = utils.read_config()
-    # pdb_codes = config['pdb']['codeList']
-
-    # Get PDB files in input_dir
-    pdb_filepaths = sorted(glob.glob(join_paths(input_dir, "*.pdb")))
-
-    apo_pdb_path = join_paths(input_dir, "0.pdb")
-    
-    dist = create_distance_matrix(apo_pdb_path)
-
-    # Find the smallest cutoff for all EN beads
-    # to have at least three springs in the ENM with 
-    # isotropic cutoff radius
-    cutoff_radius_3springs = np.amax(np.sort(dist, axis=0)[:, 2])
-
-    # Find smallest non-floppy ENM cutoff radius
-    # cutoff_radius_nonfloppy = find_smallest_cutoff_radius(apo_pdb_path, output_dir)
-
-    # Simulate ENM
-    for pdb_filepath in pdb_filepaths:
-        run_enm(pdb_filepath, output_dir, \
-            flag_combo="8.00")
+    main(input_dir, output_dir)
 
 def main(input_dir, output_dir):
     """ Runs simualtion scripts for processed PDB data (from pdb/processed/) 
         to generate raw data ready to be processed (saved in data/raw/).
     """
-    logger = logging.getLogger(__name__)
-    logger.info('making simulation data set from processed PDB structures')
+
 
     # config = utils.read_config()
     # pdb_codes = config['pdb']['codeList']
 
     # Get PDB files in input directory
-    pdb_filepaths = sorted(glob.glob(join_paths(input_dir, "*.pdb")))
+    pdb_filepaths = [join_paths(input_dir, "{}.pdb".format(form_idx)) for form_idx in range(3)]
 
-    apo_pdb_path = join_paths(input_dir, "0.pdb")
+    apo_pdb_path = pdb_filepaths[0]
 
     dist = create_distance_matrix(apo_pdb_path)
     np.savetxt(join_paths(output_dir, "dist.csv"), dist, delimiter=',', fmt='%.3f')
@@ -78,8 +55,7 @@ def main(input_dir, output_dir):
         format(cutoff_radius_3springs))
 
     # Find smallest non-floppy ENM cutoff radius
-    # cutoff_radius_nonfloppy = find_smallest_cutoff_radius(apo_pdb_path, output_dir)
-    cutoff_radius_nonfloppy = 7.5
+    cutoff_radius_nonfloppy = find_smallest_cutoff_radius(apo_pdb_path, output_dir)
     
     # Brute-force ENM scan
     for pdb_filepath in pdb_filepaths:
@@ -88,7 +64,7 @@ def main(input_dir, output_dir):
     # Simulate ENM
     # for pdb_filepath in pdb_filepaths:
     #     run_enm(pdb_filepath, output_dir, \
-    #         flag_combo="8.00")
+    #         flag_combo="-ca -het -c 8.00")
 
 
 def run_enm(pdb_filepath, output_dir, flag_combo="-ca -het -c 8.00"):
@@ -124,7 +100,7 @@ def find_smallest_cutoff_radius(pdb_filepath, output_dir, start_cutoff_radius = 
         flag_combo = "-c {} -ca".format(cutoff_radius)
         run_enm(pdb_filepath, output_dir, flag_combo=flag_combo)
 
-        eigenvalues = np.loadtxt(join_paths(output_dir, "eigenvalues"), max_rows=7)
+        eigenvalues = np.loadtxt(join_paths(output_dir, "eigenvals.csv"), max_rows=7)
         eigenvals_sum_6 = np.sum(eigenvalues[0:6])
         eigenvals_sum_7 = np.sum(eigenvalues[0:7])
 
@@ -238,4 +214,4 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    main()
+    main_comandline()

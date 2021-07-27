@@ -11,43 +11,47 @@ from copy import deepcopy
 import src.utilities as utils
 
 @click.command()
-@click.argument('input_filepath', type=click.Path(exists=True))
-@click.argument('output_filepath', type=click.Path())
-def main(input_filepath, output_filepath):
+@click.argument('input_dir', type=click.Path(exists=True))
+@click.argument('output_dir', type=click.Path())
+def main_commandline(input_dir, output_dir):
     """ Proccesses interim PDB structures (from pdb/interim/) and creates PDB 
         structural forms for simulations (saved in pdb/processed/).
     """
     logger = logging.getLogger(__name__)
     logger.info('making processed PDB forms from interim PDB structures')
+    main(input_dir, output_dir)
 
+def main(input_dir, output_dir):
+    """ Proccesses interim PDB structures (from pdb/interim/) and creates PDB 
+        structural forms for simulations (saved in pdb/processed/).
+    """
     config = utils.read_config()
-    pdb_codes = config['pdb']['codeList']
+    pdb_code = config['pdb']['id']
 
     # Data import
-    pdb_interim_structures = {pdb_code : load_structure(pdb_code, input_filepath, file_extension="pdb") \
-                        for pdb_code in pdb_codes}
+    pdb_struct = load_structure(pdb_code, input_dir, file_extension="pdb") 
 
     # Data processing
-    pdb_processed_structures = {}
-    for pdb_code, PandasPDB_object in pdb_interim_structures.items():
-        # Delete the first residue (1) and the last residues (216) from both chains
-        PandasPDB_object.df['ATOM'] = PandasPDB_object.df['ATOM'][(PandasPDB_object.df['ATOM']['residue_number'] != 1) \
-            & (PandasPDB_object.df['ATOM']['residue_number'] != 216)]
-        # Create structural forms
-        pdb_forms = {form_idx : create_form(PandasPDB_object, form_idx=form_idx) for form_idx in range(3)}
+    # Delete residues 1 and 216
+    # pdb_struct.df['ATOM'] = pdb_struct.df['ATOM'][(pdb_struct.df['ATOM']['residue_number'] != 1) \
+    #     & (pdb_struct.df['ATOM']['residue_number'] != 216)]
 
-        pdb_processed_structures[pdb_code] = pdb_forms
+    # Create structural forms
+    pdb_0 = create_form(pdb_struct, form_idx=0)
+    pdb_1 = create_form(pdb_struct, form_idx=1)
+    pdb_2 = create_form(pdb_struct, form_idx=2)
 
     # Save processed data
-    for pdb_code, pdb_forms in pdb_processed_structures.items():
-        for form_idx, pdb_form in pdb_forms.items():
-            save_structure(pdb_form, pdb_code, output_filepath, form_idx=form_idx, )
+    save_structure(pdb_0, 0, output_dir)
+    save_structure(pdb_1, 1, output_dir)
+    save_structure(pdb_2, 2, output_dir)
 
 
-def load_structure(pdb_code, input_filepath, file_extension="pdb"):
+
+def load_structure(pdb_code, input_dir, file_extension="pdb"):
     """ Loads PDB file inot BioPandas object.
     """
-    pdb_filepath = os.path.join(input_filepath, "{}.{}".format(pdb_code, file_extension))
+    pdb_filepath = os.path.join(input_dir, "{}.{}".format(pdb_code, file_extension))
     return PandasPdb().read_pdb(pdb_filepath)
 
 def create_form(data, form_idx=0):
@@ -70,16 +74,12 @@ def create_form(data, form_idx=0):
 
     return data_out
 
-def save_structure(data, pdb_code, output_filepath, form_idx=None):
+def save_structure(data, form_idx, output_dir):
     """ Save BioPandas object as a PDB record file.
     """
-    if form_idx == None:
-        output_filename = "{}.pdb".format(pdb_code)
-    
-    else:
-        output_filename = "{}.{}.pdb".format(pdb_code, form_idx)
+    output_filename = "{}.pdb".format(form_idx)
 
-    data.to_pdb(path=os.path.join(output_filepath, output_filename),
+    data.to_pdb(path=os.path.join(output_dir, output_filename),
                     records=['ATOM', 'HETATM'],
                     gz=False,
                     append_newline=True)
@@ -95,4 +95,4 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    main()
+    main_commandline()

@@ -11,24 +11,99 @@
 - pdb:
     rawFilePath:     pdb/raw/
     intFilePath:     pdb/interim/
-    proFilePath:     pdb/proccessed/
+    proFilePath:     pdb/processed/
     extFilePath:     pdb/external/
-    codeList:
-      - 1a2b
-      - 3c4d   
-
+    id:              3r6s              
+ 
 - viz:
-    xtick.labelsize: 20
-    ytick.labelsize: 20
-    font.size: 20
-    figure.autolayout: False
-    figure.figsize: 12,6
-    figure.dpi: 300
-    axes.titlesize : 22
-    axes.labelsize : 20
-    lines.linewidth : 2
-    lines.markersize : 6
-    legend.fontsize: 16
-    mathtext.fontset: stix
-    font.family : STIXGeneral
-    legend.frameon : False
+    default:
+        xtick.labelsize: 20
+        ytick.labelsize: 20
+        font.size: 20
+        figure.autolayout: False
+        figure.figsize: 12,6
+        figure.dpi: 300
+        axes.titlesize : 22
+        axes.labelsize : 20
+        lines.linewidth : 2
+        lines.markersize : 6
+        legend.fontsize: 16
+        mathtext.fontset: stix
+        font.family : STIXGeneral
+        legend.frameon : False
+    
+    jupyter:
+        xtick.labelsize: 13
+        ytick.labelsize: 13
+        font.size: 14
+        figure.autolayout: False
+        figure.figsize: 6,3
+        figure.dpi: 300
+        axes.titlesize : 16
+        axes.labelsize : 13
+        lines.linewidth : 1
+        lines.markersize : 5
+        legend.fontsize: 12
+        mathtext.fontset: stix
+        font.family : STIXGeneral
+        legend.frameon : False
+        figure.titlesize : 25
+    
+    nature:
+        xtick.labelsize: 5
+        ytick.labelsize: 5
+        font.size: 6
+        figure.autolayout: False
+        figure.figsize: 7.2,3.6
+        figure.dpi: 300
+        axes.titlesize : 7
+        axes.labelsize : 6
+        lines.linewidth : 0.5
+        lines.markersize : 0.5
+        legend.fontsize: 6
+        mathtext.fontset: stix
+        font.family : STIXGeneral
+        legend.frameon : False
+        figure.titlesize : 7
+        patch.linewidth : 0.5
+
+# Nature figure guide
+# 
+# Text size
+# Min:  5 pt
+# Max:  7 pt
+#   
+# Figure width
+# Single column:    89 mm   (3.50 in)
+# Double column:    183 mm  (7.20 in)
+# Full depth:       247 mm  (9.72 in)
+# 
+# Line weights
+# Min:  0.25 pt
+# Max:  1 pt
+# 
+# Reference: https://www.nature.com/nature/for-authors/final-submission
+
+# PNAS standard figure width size
+# Small:            87 mm   (3.42 in)
+# Medium:           114 mm  (7.20 in)
+# Large:            178 mm  (7.00 in)
+# 
+# Reference: https://www.pnas.org/authors/submitting-your-manuscript#manuscript-formatting-guidelines
+
+- colors:
+    black: 0,0,0
+    orange: 230,159,0
+    sky_blue: 86,180,233
+    bluish_green: 0,158,115
+    yellow: 240,228,66
+    blue: 0,114,178
+    vermillion: 213,94,0
+    reddish_purple: 204,121,167
+
+# Reference
+# Wong, B., 2011. Points of view: Color blindness.
+
+# Convert to hex
+# "#{:02x}{:02x}{:02x}".format(0, 128, 64)
+# "#008040"
